@@ -299,7 +299,7 @@ public :
         // Including distance would introduce cyclic dependencies.
         using coor_t = typename select_coordinate_type<Point1, Point2>::type;
         using calc_t = typename geometry::select_most_precise <coor_t, T>::type;
-        constexpr calc_t machine_giga_epsilon = 1.0e9 * std::numeric_limits<calc_t>::epsilon();
+        calc_t machine_giga_epsilon = 1.0e9 * std::numeric_limits<calc_t>::epsilon();
 
         calc_t const& a0 = geometry::get<0>(a);
         calc_t const& b0 = geometry::get<0>(b);
@@ -310,9 +310,10 @@ public :
 
         // The maximum limit is avoid, for floating point, large limits like 400
         // (which are be calculated using eps)
-        constexpr calc_t maxlimit = 1.0e-3;
+        calc_t maxlimit = 1.0e-3;
         auto const limit = (std::min)(maxlimit, limit_giga_epsilon * machine_giga_epsilon * c);
-        return std::abs(a0 - b0) <= limit && std::abs(a1 - b1) <= limit;
+        using std::abs;
+        return abs(a0 - b0) <= limit && abs(a1 - b1) <= limit;
     }
 
     template <typename Operation, typename Geometry1, typename Geometry2>
